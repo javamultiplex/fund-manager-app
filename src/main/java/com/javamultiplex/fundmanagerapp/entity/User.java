@@ -6,6 +6,7 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -13,7 +14,6 @@ import java.util.List;
 @Table(name = "USER")
 @Getter
 @Setter
-@ToString
 public class User implements Serializable {
 
     private static final long serialVersionUID = -5651999668780412351L;
@@ -26,7 +26,11 @@ public class User implements Serializable {
     private String dob;
     private String role;
     private Date registrationDate;
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
-    private List<UserContribution> userContributions;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private List<UserContribution> userContributions=new ArrayList<>();
+
+    public void addUserContribution(UserContribution userContribution) {
+        userContributions.add(userContribution);
+        userContribution.setUser(this);
+    }
 }
