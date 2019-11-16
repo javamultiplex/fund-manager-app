@@ -1,0 +1,45 @@
+package com.javamultiplex.fundmanagerapp.resource;
+
+import com.javamultiplex.fundmanagerapp.entity.Event;
+import com.javamultiplex.fundmanagerapp.entity.Expenses;
+import com.javamultiplex.fundmanagerapp.model.ExpenseDTO;
+import com.javamultiplex.fundmanagerapp.repository.EventRepository;
+import com.javamultiplex.fundmanagerapp.repository.ExpenseRepository;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Optional;
+
+@RestController
+@RequestMapping("/api/v1/")
+@Slf4j
+public class EventExpensesResource {
+
+    @Autowired
+    private EventRepository eventRepository;
+
+    @PostMapping("/add-expense")
+    public ResponseEntity<String> addExpense(@RequestBody ExpenseDTO expenseDTO) {
+        Long event_id = expenseDTO.getEvent_id();
+        log.info("Event is [{}]", event_id);
+        Optional<Event> event = eventRepository.findById(event_id);
+        Event event1 = null;
+        if (event.isPresent()) {
+            Expenses expense = new Expenses(expenseDTO.getName(), expenseDTO.getAmount());
+            event1 = event.get();
+            event1.addExpenses(expense);
+        } else {
+            return new ResponseEntity<>("Please enter valid user Id", HttpStatus.BAD_REQUEST);
+        }
+        eventRepository.save(event1);
+        log.info("Event - > [{}]", event1);
+        return new ResponseEntity<>("Event expense has been added successfully", HttpStatus.OK);
+    }
+
+}
