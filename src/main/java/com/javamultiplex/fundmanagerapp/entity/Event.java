@@ -23,7 +23,6 @@ public class Event {
     private String date;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "event")
-    @JoinColumn(name = "user_id")
     private List<Expenses> expenses;
 
     public void addExpenses(Expenses expense) {

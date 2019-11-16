@@ -12,17 +12,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1/")
+@RequestMapping("/api/v1")
 @Slf4j
 public class EventResource {
 
     @Autowired
     private EventRepository eventRepository;
 
-    @PostMapping("/add-event")
+    @PostMapping("/event")
     public ResponseEntity<String> addEvent(@RequestBody Event event) {
-        eventRepository.save(event);
+        Event result = eventRepository.save(event);
         log.info("Event added [{}]", event);
-        return new ResponseEntity<String>("Event successfully added with event Id -> " + event.getId(), HttpStatus.OK);
+        return new ResponseEntity<String>("Event successfully added with event Id -> " + result.getId(), HttpStatus.OK);
     }
 }

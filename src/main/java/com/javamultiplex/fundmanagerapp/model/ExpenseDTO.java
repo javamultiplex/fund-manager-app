@@ -14,6 +14,6 @@ public class ExpenseDTO implements Serializable {
 
     private String name;
     private String amount;
-    private Long event_id;
+    private Long eventId;
 
 }

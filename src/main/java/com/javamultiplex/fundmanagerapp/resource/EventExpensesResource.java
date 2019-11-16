@@ -17,25 +17,25 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/v1/")
+@RequestMapping("/api/v1")
 @Slf4j
 public class EventExpensesResource {
 
     @Autowired
     private EventRepository eventRepository;
 
-    @PostMapping("/add-expense")
+    @PostMapping("/event-expense")
     public ResponseEntity<String> addExpense(@RequestBody ExpenseDTO expenseDTO) {
-        Long event_id = expenseDTO.getEvent_id();
-        log.info("Event is [{}]", event_id);
-        Optional<Event> event = eventRepository.findById(event_id);
+        Long eventId = expenseDTO.getEventId();
+        log.info("Event id is [{}]", eventId);
+        Optional<Event> event = eventRepository.findById(eventId);
         Event event1 = null;
         if (event.isPresent()) {
             Expenses expense = new Expenses(expenseDTO.getName(), expenseDTO.getAmount());
             event1 = event.get();
             event1.addExpenses(expense);
         } else {
-            return new ResponseEntity<>("Please enter valid user Id", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Please enter valid event Id", HttpStatus.BAD_REQUEST);
         }
         eventRepository.save(event1);
         log.info("Event - > [{}]", event1);
