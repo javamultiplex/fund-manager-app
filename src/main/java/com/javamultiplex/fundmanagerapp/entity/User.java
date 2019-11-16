@@ -25,6 +25,7 @@ public class User implements Serializable {
     private String name;
     private String dob;
     private String role;
+    private String password;
     private Date registrationDate;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<UserContribution> userContributions=new ArrayList<>();
